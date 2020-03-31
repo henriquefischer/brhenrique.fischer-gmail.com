@@ -1,4 +1,4 @@
 from ply.yacc import yacc
-from projeto01 impor UClexer
+from projeto import UCLexer
 
 class Parser:
