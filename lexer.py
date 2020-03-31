@@ -22,7 +22,6 @@ class UCLexer():
     def build(self, **kwargs):
         """ Builds the lexer from the specification. Must be
             called after the lexer object is created.
-
             This method exists separately, because the PLY
             manual warns against calling lex.lex inside __init__
         """
@@ -65,118 +64,122 @@ class UCLexer():
     for keyword in keywords:
         keyword_map[keyword.lower()] = keyword
 
-    # tokens
+    #
+    # All the tokens recognized by the lexer
+    #
     tokens = keywords + (
-        # identifiers
+        # Identifiers
         'ID',
 
         # constants
-        'INT_CONST', 'FLOAT_CONST', 'STRING'
+        'INT_CONST', 'FLOAT_CONST', 'STRING',
+
 
         # operations
-        'EQUALS', 'EQ', 'MINUS', 'ADDRESS', 'PLUS', 'PLUSPLUS', 'LT', 'HT', 'HE', 'DIVIDE', 'MOD', 'DOF'
-        
+        'EQUALS', 'EQ', 'TIMES', 'MINUS', 'ADDRESS', 'PLUS', 'PLUSPLUS', 'LT', 'HT', 'LE', 'HE', 'DIVIDE', 'MOD', 'DIFF',
+
         # braces
-        'RPAREN', 'LPAREN', 'RBRACE', 'RBRACKET', 'LBRACKET'
-        
+        'RPAREN', 'LPAREN', 'RBRACE', 'LBRACE', 'RBRACKET', 'LBRACKET',
+
         # punctuation
-        'SEMI', 'COMMA'
+        'SEMI', 'COMMA',
     )
 
-    # rules
 
-    t_ignore = '\t'
+    # Rules
+    t_ignore = ' \t'
 
-    def token_newlikne(self,t):
+    def t_NEWLINE(self, t):
         r'\n+'
         t.lexer.lineno += t.value.count("\n")
 
-    def token_id(self,t):
-        r'[a-zA-Z_][0-9a-zA-Z]*'
-        t.type = self.keyword_map.get(t.value,"ID")
+    def t_ID(self, t):
+        r'[a-zA-Z_][0-9a-zA-Z_]*'
+        t.type = self.keyword_map.get(t.value, "ID")
         return t
 
-    def token_multicomments(self, t):
+    def t_multilinecomment(self, t):
         r'/\*(.|\n)*?\*/'
         t.lexer.lineno += t.value.count('\n')
 
-    def token_comment(self,t):
+    def t_comment(self,t):
         r'\/\/.*'
 
-    def token_string(self,t):
+    def t_string(self,t):
         r'\".*?\"'
-        t.type = self.keyword_map.get(t.value,"STRING")
+        t.type = self.keyword_map.get(t.value, "STRING")
         return t
 
-    def token_error(self,f):
-        message = "character not accepted %s" % repr(t.value[0])
-        self._error(message,t)
+    def t_error(self, t):
+        msg = "Illegal character %s" % repr(t.value[0])
+        self._error(msg, t)
 
-    def token_divide(self,t):
+    def t_divide(self,t):
         r'\/'
         t.type = self.keyword_map.get(t.value, "DIVIDE")
+        return t
 
-    def token_eq(self,t):
+    def t_EQ(self, t):
         r'\=\='
-        t.type = self.keyword_map.get(t.value."EQ")
+        t.type = self.keyword_map.get(t.value, "EQ")
         return t
 
-    def token_equals(self,t):
+    def t_EQUALS(self, t):
         r'='
-        t.type = self.keyword_map.get(t.value,"EQUALS")
+        t.type = self.keyword_map.get(t.value, "EQUALS")
         return t
 
-    def token_plusplus(self, t):
+    def t_PLUSPLUS(self, t):
         r'\+\+'
         t.type = self.keyword_map.get(t.value, "PLUSPLUS")
         return t
 
-    def token_plus(self, t):
+    def t_PLUS(self, t):
         r'\+'
         t.type = self.keyword_map.get(t.value, "PLUS")
         return t
 
-    def tokne_minus(self, t):
+    def t_MINUS(self, t):
         r'\-'
         t.type = self.keyword_map.get(t.value, "MINUS")
         return t
 
-    def token_diff(self,t):
+    def t_DIFF(self,t):
         r'\!='
         t.type = self.keyword_map.get(t.value, "DIFF")
         return t
 
-    def token_le(self, t):
+    def t_LE(self, t):
         r'\<\='
         t.type = self.keyword_map.get(t.value, "LE")
         return t
 
-    def token_lt(self, t):
+    def t_LT(self, t):
         r'\<'
         t.type = self.keyword_map.get(t.value, "LT")
         return t
 
-    def token_he(self, t):
+    def t_HE(self, t):
         r'\>\='
         t.type = self.keyword_map.get(t.value, "HE")
         return t
 
-    def token_ht(self, t):
+    def t_HT(self, t):
         r'\>'
         t.type = self.keyword_map.get(t.value, "HT")
         return t
 
-    def token_semi(self, t):
+    def t_SEMI(self, t):
         r';'
         t.type = self.keyword_map.get(t.value, "SEMI")
         return t
 
-    def token_float_const(self, t):
+    def t_FLOAT_CONST(self, t):
         r'[0-9]\.[0-9]*'
         t.type = self.keyword_map.get(t.value, "FLOAT_CONST")
         return t
 
-    def token_int_cons(self, t):
+    def t_INT_CONST(self, t):
         r'[0-9][0-9]*'
         t.type = self.keyword_map.get(t.value, "INT_CONST")
         return t
@@ -186,52 +189,51 @@ class UCLexer():
         t.type = self.keyword_map.get(t.value, "TIMES")
         return t
 
-    def token_mod(self,t):
+    def t_MOD(self,t):
         r'\%'
         t.type = self.keyword_map.get(t.value, "MOD")
         return t
 
-    def token_lparen(self, t):
+    def t_LPAREN(self, t):
         r'\('
         t.type = self.keyword_map.get(t.value, "LPAREN")
         return t
 
-    def token_rparen(self, t):
+    def t_RPAREN(self, t):
         r'\)'
         t.type = self.keyword_map.get(t.value, "RPAREN")
         return t
 
-    def token_lbrace(self, t):
+    def t_LBRACE(self, t):
         r'\{'
         t.type = self.keyword_map.get(t.value, "LBRACE")
         return t
 
-    def token_rbrace(self, t):
+    def t_RBRACE(self, t):
         r'\}'
         t.type = self.keyword_map.get(t.value, "RBRACE")
         return t
 
-    def token_lbracket(self, t):
+    def t_LBRACKET(self, t):
         r'\['
         t.type = self.keyword_map.get(t.value, "LBRACKET")
         return t
 
-    def token_rbracket(self, t):
+    def t_RBRACKET(self, t):
         r'\]'
         t.type = self.keyword_map.get(t.value, "RBRACKET")
         return t
 
-    def token_comma(self,t):
+    def t_COMMA(self,t):
         r'\,'
         t.type = self.keyword_map.get(t.value, "COMMA")
         return t
 
-    def token_address(self,t):
+    def t_ADDRESS(self,t):
         r'\&'
         t.type = self.keyword_map.get(t.value, "ADDRESS")
         return t
 
-    # Scanner (used only for test)
     def scan(self, data):
         self.lexer.input(data)
         while True:
@@ -252,14 +254,3 @@ if __name__ == '__main__':
     m = UCLexer(print_error)
     m.build()  # Build the lexer
     m.scan(open(sys.argv[1]).read())  # print tokens
-
-
-
-
-
-
-
-
-
-
-
