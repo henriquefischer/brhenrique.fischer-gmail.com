@@ -72,7 +72,7 @@ class UCLexer():
         'ID',
 
         # constants
-        'FLOAT_CONST', 'INT_CONST', 'STRING'
+        'FLOAT_CONST', 'INT_CONST', 'STRING',
 
 
         # operations
