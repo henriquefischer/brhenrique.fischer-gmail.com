@@ -36,7 +36,7 @@ def p_declaration_list(p):
     p[0] = [p[1]] if len(p) == 2 else p[1] + [p[2]]
     
 def p_statement_list(p):
-    """ statement_list  : statement_list
+    """ statement_list  : statement
                         | statement_list statement
     """
     p[0] = [p[1]] if len(p) == 2 else p[1] + [p[2]]
@@ -215,15 +215,14 @@ def p_initializer_list(p):
     """
     p[0] = [p[1]] if len(p) == 2 else p[1] + [p[2]]
 
-# # TODO expression and compound
-                    # | compound_statement
-                    # | selection_statement
-                    # | iteration_statement
 def p_statement(p):
     """statement    : expression_statement
+                    | iteration_statement
+                    | compound_statement
                     | jump_statement
                     | assert_statement
                     | print_statement
+                    | selection_statement
                     | read_statement"""
     p[0] = [p[1]] if len(p) == 2 else p[1] + [p[2]]
     # p[0] = p_selection_statement(self,p) if p[1] == 'if'
@@ -244,17 +243,24 @@ def p_expression_statement(p):
                                 | expression SEMI"""
     p[0] = [p[1]] if len(p) == 2 else p[1] + [p[2]]
 
-# def p_selection_statement(p):
-#     """ global_declaration_list : global_declaration
-#                                 | global_declaration_list global_declaration
-#     """
-#     p[0] = [p[1]] if len(p) == 2 else p[1] + [p[2]]
+def p_selection_statement(p):
+    """ selection_statement : IF LPAREN expression RPAREN statement
+                        | IF LPAREN expression RPAREN statement ELSE statement
+    """
+    p[0] = [p[1]] if len(p) == 2 else p[1] + [p[2]]
 
-# def p_iteration_statement(p):
-#     """ global_declaration_list : global_declaration
-#                                 | global_declaration_list global_declaration
-#     """
-#     p[0] = type(p)
+def p_iteration_statement(p):
+    """ iteration_statement : WHILE LPAREN expression RPAREN statement
+                            | FOR LPAREN SEMI SEMI RPAREN statement
+                            | FOR LPAREN expression SEMI SEMI RPAREN statement
+                            | FOR LPAREN SEMI expression SEMI RPAREN statement
+                            | FOR LPAREN SEMI SEMI expression RPAREN statement
+                            | FOR LPAREN expression SEMI expression SEMI RPAREN statement
+                            | FOR LPAREN expression SEMI SEMI expression RPAREN statement
+                            | FOR LPAREN SEMI expression SEMI expression RPAREN statement
+                            | FOR LPAREN expression SEMI expression SEMI expression RPAREN statement
+    """
+    p[0] = type(p)
 
 def p_jump_statement(p):
     """ jump_statement  : BREAK
@@ -278,11 +284,11 @@ def p_print_statement(p):
     p[0] = [p[1]] if len(p) == 2 else p[1] + [p[2]]
 
 def p_read_statement(p):
-    """ read_statement : READ LPAREN declarator_list RPAREN """
+    """ read_statement : READ LPAREN declarator_list RPAREN SEMI"""
     p[0] = [p[1]] if len(p) == 2 else p[1] + [p[2]]
 
 def p_declarator_list(p):
-    """ declarator_list : declarator_list
+    """ declarator_list : declarator
                         | declarator_list declarator
     """
     p[0] = [p[1]] if len(p) == 2 else p[1] + [p[2]]
