@@ -282,11 +282,13 @@ class UCLexer():
 
     def scan(self, data):
         self.lexer.input(data)
+        self.all = []
         while True:
             tok = self.lexer.token()
             if not tok:
-                break
-            print(tok)
+              break
+            self.all.append(tok)
+        return self.all
 
 
 if __name__ == '__main__':

@@ -99,7 +99,7 @@ class Parser(object):
 
     def p_frase(self,p):
         """ frase : STRING """
-        p[0] = ID(p[1], lineno=p.lineno(1))
+        p[0] = STRING(p[1], lineno=p.lineno(1))
 
     def p_int_const(self,p):
         """ int_const : INT_CONST """
@@ -142,7 +142,32 @@ class Parser(object):
                                 | binary_expression AND binary_expression
                                 | binary_expression OR binary_expression
         """
-        p[0] = [p[1]] if len(p) == 2 else p[1] + [p[2]]
+        if p[2] == '*':
+            p[0] = p[1] * p[3]
+        elif p[2] == '/':
+            p[0] = p[1] / p[3]
+        elif p[2] == '%':
+            p[0] = p[1] % p[3]
+        elif p[2] == '-':
+            p[0] = p[1] - p[3]
+        elif p[2] == '+':
+            p[0] = p[1] + p[3]
+        elif p[2] == '<':
+            p[0] = p[1] < p[3]
+        elif p[2] == '<=':
+            p[0] = p[1] <= p[3]
+        elif p[2] == '>':
+            p[0] = p[1] > p[3]
+        elif p[2] == '>=':
+            p[0] = p[1] >= p[3]
+        elif p[2] == '==':
+            p[0] = p[1] == p[3]
+        elif p[2] == '!=':
+            p[0] = p[1] != p[3]
+        elif p[2] == '&&':
+            p[0] = p[1] and p[3]
+        elif p[2] == '||':
+            p[0] = p[1] or p[3]
 
     def p_cast_expression(self,p):
         """ cast_expression : unary_expression
@@ -358,7 +383,7 @@ class Parser(object):
         import sys
         msg = open(sys.argv[1]).read()
         token = self.lexer.scan(msg)
-        # print(token)    
+        print(token)    
         return  self.parser.parse(token)
 
 if __name__ == '__main__':
