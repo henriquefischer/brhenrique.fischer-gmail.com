@@ -1,6 +1,6 @@
 import ply.yacc as yacc
 import lexer as UCLexer 
-from ast as ast
+from ast import ast
 tokens = UCLexer.UCLexer.tokens
 
 class UCParser(object):
@@ -369,10 +369,11 @@ class UCParser(object):
     def __init__(self):
         self.lexer = UCLexer.UCLexer(print_error)
         self.lexer.build()
+        self.ast = ast.show()
         self.tokens = UCLexer.UCLexer.tokens
         self.parser = yacc.yacc(module=self)
 
-    def parse(self):
+    def parse(self, var, debug):
         import sys
         # msg = open(sys.argv[1]).read()
         token = self.lexer.scan(msg)
