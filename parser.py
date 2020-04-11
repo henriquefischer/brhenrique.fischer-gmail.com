@@ -383,7 +383,6 @@ class Parser(object):
         import sys
         msg = open(sys.argv[1]).read()
         token = self.lexer.scan(msg)
-        print(token)    
         return  self.parser.parse(token)
 
 if __name__ == '__main__':
