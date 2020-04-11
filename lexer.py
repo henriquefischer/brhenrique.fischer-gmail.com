@@ -54,6 +54,10 @@ class UCLexer():
     def _make_tok_location(self, token):
         return (token.lineno, self.find_tok_column(token))
 
+    # Test function get
+    def get__item(self):
+      return self
+
     # Reserved keywords
     keywords = (
         'ASSERT', 'BREAK', 'CHAR', 'ELSE', 'FLOAT', 'FOR', 'IF',
