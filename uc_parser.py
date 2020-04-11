@@ -26,6 +26,13 @@ class UCParser(object):
         """
         self.lexer.lineno = 1
 
+    def _token_coord(self, p, token_idx):
+        last_cr = p.lexer.lexer.lexdata.rfind('\n', 0, p.lexpos(token_idx))
+        if last_cr < 0:
+            last_cr = -1
+        column = (p.lexpos(token_idx) - (last_cr))
+        return Coord(p.lineno(token_idx), column)
+
     def input(self, text):
         self.lexer.input(text)
 
