@@ -1,5 +1,6 @@
 import ply.yacc as yacc
 import lexer as UCLexer 
+from ast as ast
 tokens = UCLexer.UCLexer.tokens
 
 class UCParser(object):
@@ -362,14 +363,6 @@ class UCParser(object):
         """
         p[0] = [p[1]] if len(p) == 2 else p[1] + [p[2]]
 
-    # def scan(self, data):
-    #     self.lexer.input(data)
-    #     while True:
-    #         tok = self.lexer.token()
-    #         if not tok:
-    #             break
-    #         print(tok)
-
     def print_error(msg, x, y):
         print("Lexical error: %s at %d:%d" % (msg, x, y))
 
@@ -381,6 +374,6 @@ class UCParser(object):
 
     def parse(self):
         import sys
-        msg = open(sys.argv[1]).read()
+        # msg = open(sys.argv[1]).read()
         token = self.lexer.scan(msg)
         return  self.parser.parse(token)
