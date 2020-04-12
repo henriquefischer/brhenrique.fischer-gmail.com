@@ -284,6 +284,7 @@ class UCLexer():
       msg = "Illegal character %s" % repr(t.value[0])
       self._error(msg, t)
 
+'''
     def scan(self, data):
         self.lexer.input(data)
         while True:
@@ -304,4 +305,4 @@ if __name__ == '__main__':
     m = UCLexer(print_error)
     m.build()  # Build the lexer
     m.scan(open(sys.argv[1]).read())  # print tokens
-
+'''

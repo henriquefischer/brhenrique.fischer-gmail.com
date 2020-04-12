@@ -44,29 +44,29 @@ def show(self, buf=sys.stdout, offset=0, attrnames=False, nodenames=False, showc
           True if you want to see the actual node names within their parents.
       showcoord:
           Do you want the coordinates of each Node to be displayed.
-    """
-    lead = ' ' * offset
-    if nodenames and _my_node_name is not None:
-      buf.write(lead + self.__class__.__name__+ ' <' + _my_node_name + '>: ')
+  """
+  lead = ' ' * offset
+  if nodenames and _my_node_name is not None:
+    buf.write(lead + self.__class__.__name__+ ' <' + _my_node_name + '>: ')
+  else:
+    buf.write(lead + self.__class__.__name__+ ': ')
+
+  if self.attr_names:
+    if attrnames:
+        nvlist = [(n, getattr(self, n)) for n in self.attr_names if getattr(self, n) is not None]
+        attrstr = ', '.join('%s=%s' % nv for nv in nvlist)
     else:
-      buf.write(lead + self.__class__.__name__+ ': ')
+        vlist = [getattr(self, n) for n in self.attr_names]
+        attrstr = ', '.join('%s' % v for v in vlist)
+    buf.write(attrstr)
 
-    if self.attr_names:
-      if attrnames:
-          nvlist = [(n, getattr(self, n)) for n in self.attr_names if getattr(self, n) is not None]
-          attrstr = ', '.join('%s=%s' % nv for nv in nvlist)
-      else:
-          vlist = [getattr(self, n) for n in self.attr_names]
-          attrstr = ', '.join('%s' % v for v in vlist)
-      buf.write(attrstr)
+  if showcoord:
+    if self.coord:
+      buf.write('%s' % self.coord)
+  buf.write('\n')
 
-    if showcoord:
-      if self.coord:
-        buf.write('%s' % self.coord)
-    buf.write('\n')
-
-    for (child_name, child) in self.children():
-      child.show(buf, offset + 4, attrnames, nodenames, showcoord, child_name)
+  for (child_name, child) in self.children():
+    child.show(buf, offset + 4, attrnames, nodenames, showcoord, child_name)
 
 class Coord(object):
   """ Coordinates of a syntactic element. Consists of:
@@ -336,7 +336,7 @@ class Break(Node):
 
   attr_names = ()
 
-lass For(Node):
+class For(Node):
   __slots__ = ('initial','cond','next','statement','coord')
 
   def __init__(self, initial, cond, next, statement, coord=None):
@@ -370,9 +370,9 @@ class While(Node):
 
   def children(self):
     nodelist = []
-    if.self.cond is not None:
+    if self.cond is not None:
       nodelist.append(('cond', self.cond))
-    if.self.statement is not None:
+    if self.statement is not None:
       nodelist.append(('statement', self.statement))
     return tuple(nodelist)
 
@@ -389,11 +389,11 @@ class If(Node):
 
   def children(self):
     nodelist = []
-    if.self.cond is not None:
+    if self.cond is not None:
       nodelist.append(('cond', self.cond))
-    if.self.true is not None: 
+    if self.true is not None: 
       odelist.append(('true', self.true))
-    if.self.false is not None:
+    if self.false is not None:
       nodelist.append(('false', self.false))
     return tuple(nodelist)
 
@@ -447,7 +447,7 @@ class InitList(Node):
 
   def children(self):
     nodelist = []
-    fot i, child in enumerate(self.first or []):
+    for i, child in enumerate(self.first or []):
       nodelist.append(("expres[{}]".format(i), child))
     return tuple(nodelist)
 
@@ -497,9 +497,9 @@ class VarDecl(Node):
     return tuple(nodelist)
 
     def __iter__(self):
-    if self.type is not None:
-        yield self.type
-    if self.namevar is not None:
-        yield self.namevar
+      if self.type is not None:
+          yield self.type
+      if self.namevar is not None:
+          yield self.namevar
 
     attr_names = ()

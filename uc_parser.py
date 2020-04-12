@@ -1,6 +1,6 @@
 import ply.yacc as yacc
 import lexer as UCLexer 
-from ast import ast
+import ast
 tokens = UCLexer.UCLexer.tokens
 
 class UCParser(object):
@@ -348,7 +348,7 @@ class UCParser(object):
 
     def p_error(self,p):
         """ID LPAREN error RPAREN"""
-        print "Syntax error in arguments\n"
+        print ("Syntax error in arguments\n")
 
     def p_assert_statement(self,p):
         """ assert_statement : ASSERT expression SEMI
