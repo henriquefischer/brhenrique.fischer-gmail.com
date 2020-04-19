@@ -33,10 +33,9 @@ Program:
                 Assignment: =   @ 7:10
                     ID: i   @ 7:10
                     Constant: int, 1   @ 7:14
-                BinaryOp: <   @ 7:17
+                BinaryOp: <=   @ 7:17
                     ID: i   @ 7:17
-                    UnaryOp: =   @ 7:22
-                        ID: n   @ 7:22
+                    ID: n   @ 7:22
                 UnaryOp: ++   @ 7:27
                     ID: i   @ 7:27
                 Compound:    @ 7:1
@@ -57,3 +56,4 @@ Program:
                         ID: nextTerm   @ 11:14
             Return:    @ 14:5
                 Constant: int, 0   @ 14:12
+
