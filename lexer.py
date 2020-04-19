@@ -110,7 +110,7 @@ class UCLexer():
       return t
 
     def t_ASSIGN_MINUS(self, t):
-      r'-='
+      r'\-\='
       t.type = self.keyword_map.get(t.value, "ASSIGN_MINUS")
       return t
 
@@ -125,7 +125,7 @@ class UCLexer():
       return t
 
     def t_ASSIGN_TIMES(self, t):
-      r'\*='
+      r'\*\='
       t.type = self.keyword_map.get(t.value,"ASSIGN_TIMES")
       return t
 
@@ -135,7 +135,7 @@ class UCLexer():
       return t
 
     def t_ASSIGN_DIVIDE(self, t):
-      r'/='
+      r'\/\='
       t.type = self.keyword_map.get(t.value, "ASSIGN_DIVIDE")
       return t
 
@@ -145,7 +145,7 @@ class UCLexer():
       return t
 
     def t_SEMI(self, t):
-      r';'
+      r'\;'
       t.type = self.keyword_map.get(t.value, "SEMI")
       return t
 
@@ -170,37 +170,37 @@ class UCLexer():
       return t
 
     def t_NOT(self, t):
-      r'!'
+      r'\!'
       t.type = self.keyword_map.get(t.value,"NOT")
       return t
 
     def t_DIFF(self,t):
-      r'\!='
+      r'\!\='
       t.type = self.keyword_map.get(t.value, "DIFF")
       return t
 
     def t_EQUALS(self, t):
-      r'=='
+      r'\=\='
       t.type = self.keyword_map.get(t.value, "EQUALS")
       return t
 
     def t_LT(self, t):
-      r'\<'
+      r'\<\='
       t.type = self.keyword_map.get(t.value, "LT")
       return t
 
     def t_LE(self, t):
-      r'\<\='
+      r'\<'
       t.type = self.keyword_map.get(t.value, "LE")
       return t
 
     def t_HT(self, t):
-      r'\>'
+      r'\>\='
       t.type = self.keyword_map.get(t.value, "HT")
       return t
 
     def t_HE(self, t):
-      r'\>\='
+      r'\>'
       t.type = self.keyword_map.get(t.value, "HE")
       return t
 
@@ -210,7 +210,7 @@ class UCLexer():
       return t
 
     def t_ASSIGN_MOD(self, t):
-      r'%='
+      r'\%\='
       t.type = self.keyword_map.get(t.value, "ASSIGN_MOD")
       return t
 
