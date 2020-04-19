@@ -169,14 +169,14 @@ class UCLexer():
       t.type = self.keyword_map.get(t.value,"AND")
       return t
 
-    def t_NOT(self, t):
-      r'\!'
-      t.type = self.keyword_map.get(t.value,"NOT")
-      return t
-
     def t_DIFF(self,t):
       r'\!\='
       t.type = self.keyword_map.get(t.value, "DIFF")
+      return t
+
+    def t_NOT(self, t):
+      r'\!'
+      t.type = self.keyword_map.get(t.value,"NOT")
       return t
 
     def t_EQUALS(self, t):
