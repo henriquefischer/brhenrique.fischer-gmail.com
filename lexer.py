@@ -133,6 +133,9 @@ class UCLexer():
       r'\*'
       t.type = self.keyword_map.get(t.value, "TIMES")
       return t
+    
+    def t_comment(self,t):
+      r'\/\/.*'
 
     def t_ASSIGN_DIVIDE(self, t):
       r'\/\='
@@ -271,9 +274,6 @@ class UCLexer():
     def t_multilinecomment(self, t):
       r'/\*(.|\n)*?\*/'
       t.lexer.lineno += t.value.count('\n')
-
-    def t_comment(self,t):
-      r'\/\/.*'
 
     def t_string(self,t):
       r'\".*?\"'
