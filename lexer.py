@@ -187,22 +187,22 @@ class UCLexer():
       t.type = self.keyword_map.get(t.value, "EQUALS")
       return t
 
-    def t_LT(self, t):
+    def t_LE(self, t):
       r'\<\='
       t.type = self.keyword_map.get(t.value, "LT")
       return t
 
-    def t_LE(self, t):
+    def t_LT(self, t):
       r'\<'
       t.type = self.keyword_map.get(t.value, "LE")
       return t
 
-    def t_HT(self, t):
+    def t_HE(self, t):
       r'\>\='
       t.type = self.keyword_map.get(t.value, "HT")
       return t
 
-    def t_HE(self, t):
+    def t_HT(self, t):
       r'\>'
       t.type = self.keyword_map.get(t.value, "HE")
       return t
