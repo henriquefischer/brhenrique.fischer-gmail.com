@@ -1,3 +1,7 @@
+
+from ast import *
+from uc_type import *
+
 class SymbolTable(object):
     '''
     Class representing a symbol table.  It should provide functionality

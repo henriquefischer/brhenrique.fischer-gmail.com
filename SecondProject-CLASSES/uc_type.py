@@ -23,8 +23,12 @@ IntType = uCType("int",
                  )
 
 FloatType = uCType("float",
-                   ...
-    )
+                 unary_ops   = {"-", "+", "--", "++", "p--", "p++", "*", "&"},
+                 binary_ops  = {"+", "-", "*", "/", "%"},
+                 rel_ops     = {"==", "!=", "<", ">", "<=", ">="},
+                 assign_ops  = {"=", "+=", "-=", "*=", "/=", "%="}
+                 )
+
 CharType = uCType("char",
                    ...
     )
@@ -32,5 +36,5 @@ ArrayType = uCType("array",
                    unary_ops   = {"*", "&"},
                    rel_ops     = {"==", "!="}
                    )
-...
+
 

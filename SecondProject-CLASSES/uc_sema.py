@@ -1,3 +1,7 @@
+from uc_type import UCType
+from uc_symbol import SymbolTable
+from ast import *
+
 class NodeVisitor(object):
     """ A base NodeVisitor class for visiting uc_ast nodes.
         Subclass it and define your own visit_XXX methods, where
