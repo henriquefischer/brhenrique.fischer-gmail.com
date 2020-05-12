@@ -67,6 +67,7 @@ ConstantType = uCType(a)(
 
 VoidType = uCType("void")
 
+BoolType = uCType("bool")
 
 
 
