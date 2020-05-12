@@ -29,12 +29,45 @@ FloatType = uCType("float",
                  assign_ops  = {"=", "+=", "-=", "*=", "/=", "%="}
                  )
 
+#one character
 CharType = uCType("char",
-                   ...
-    )
-ArrayType = uCType("array",
-                   unary_ops   = {"*", "&"},
-                   rel_ops     = {"==", "!="}
-                   )
+                unary_ops   = {"&"},
+                binary_ops  = {"+"},
+                rel_ops     = {"==", "!=", "<", ">", "<=", ">="},
+                assign_ops  = {"=", "+=", "-=", "*=", "/=", "%="}
+            )
+
+StringType = uCType("string",
+                unary_ops   = {"&"},
+                binary_ops  = {"+"},
+                rel_ops     = {"==", "!=", "<", ">", "<=", ">="},
+                assign_ops  = {"="}
+            )
+
+ArrayType = uCType("int_array",
+                binary_ops  = {"+", "-", "*", "/", "%"},
+                unary_ops   = {"*", "&"},
+                rel_ops     = {"==", "!="}
+            )
+
+ArrayType = uCType("float_array",
+                binary_ops  = {"+", "-", "*", "/", "%"},
+                unary_ops   = {"*", "&"},
+                rel_ops     = {"==", "!="}
+            )
+
+ConstantType = uCType(a)(
+    if a == 'char':
+        return CharType
+    elif a == 'int':
+        return IntType
+    elif a == 'float':
+        return FloatType
+)
+
+VoidType = uCType("void")
+
+
+
 
 
