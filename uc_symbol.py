@@ -13,4 +13,3 @@ class SymbolTable(object):
         return self.symtab.get(a)
     def add(self, a, v):
         self.symtab[a] = v
-

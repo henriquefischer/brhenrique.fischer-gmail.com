@@ -42,13 +42,13 @@ StringType = uCType("string",
                 assign_ops  = {"="}
             )
 
-ArrayType = uCType("int_array",
+ArrayIntType = uCType("int_array",
                 binary_ops  = {"+", "-", "*", "/", "%"},
                 unary_ops   = {"*", "&"},
                 rel_ops     = {"==", "!="}
             )
 
-ArrayType = uCType("float_array",
+ArrayFloatType = uCType("float_array",
                 binary_ops  = {"+", "-", "*", "/", "%"},
                 unary_ops   = {"*", "&"},
                 rel_ops     = {"==", "!="}

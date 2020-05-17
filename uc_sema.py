@@ -1,6 +1,32 @@
-from uc_type import UCType
+from uc_type import *
 from uc_symbol import SymbolTable
 from ast import *
+
+
+class UndoStack:
+
+    def __init__(self):
+        self.items = []
+
+    def push(self, item):
+        self.items.append(item)
+    
+    def pop(self, item):
+        return self.items.pop()
+
+    def peek(self):
+        return self.items[len(self.items)-1]
+
+    def size(self):
+        return len(self.items)
+
+    def isEmpty(self):
+        return self.items == []
+
+    def __str__(self):
+        for i in self.items:
+            print(i)
+            
 
 class NodeVisitor(object):
     """ A base NodeVisitor class for visiting uc_ast nodes.
@@ -59,5 +85,62 @@ class NodeVisitor(object):
         """
         for c in node:
             self.visit(c)
+
+
+class Visitor(NodeVisitor):
+    '''
+    Program visitor class. This class uses the visitor pattern. You need to define methods
+    of the form visit_NodeName() for each kind of AST node that you want to process.
+    Note: You will need to adjust the names of the AST nodes if you picked different names.
+    '''
+    def __init__(self):
+        # Initialize the symbol table
+        self.symtab = SymbolTable()
+
+        # Add built-in type names (int, float, char) to the symbol table
+        self.typemap = {
+            'int': IntType,
+            'float': FloatType,
+            'char': CharType,
+            'string': StringType,
+            'int_array': ArrayIntType,
+            'float_array': ArrayFloatType,
+            'bool': BoolType,
+            'constant': ConstantType,
+            'void': VoidType
+        }
+        self.debug = debug
+
+    def error(self, message):
+        self.error_array.append("Error: " + message)
+
+    def print_error(self):
+        if len(self.error_array) > 0:
+            for i in self.error_array:
+                print(i)
+    
+    def visit_Program(self,node):
+        # 1. Visit all of the global declarations
+        # 2. Record the associated symbol table
+        for _decl in node.gdecls:
+            self.visit(_decl)
+
+    def visit_BinaryOp(self, node):
+        # 1. Make sure left and right operands have the same type
+        # 2. Make sure the operation is supported
+        # 3. Assign the result type
+        self.visit(node.left)
+        self.visit(node.right)
+        node.type = node.left.type
+
+    def visit_Assignment(self, node):
+        ## 1. Make sure the location of the assignment is defined
+        sym = self.symtab.lookup(node.location)
+        assert sym, "Assigning to unknown sym"
+        ## 2. Check that the types match
+        self.visit(node.value)
+        assert sym.type == node.value.type, "Type mismatch in assignment"
+
+
 
 
