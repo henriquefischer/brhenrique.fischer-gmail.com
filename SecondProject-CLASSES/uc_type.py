@@ -3,7 +3,7 @@ class uCType(object):
     Class that represents a type in the uC language.  Types 
     are declared as singleton instances of this type.
     '''
-    def __init__(self, name, bin_ops=set(), un_ops=set()):
+    def __init__(self, name, bin_ops=set(), un_ops=set(), rel_ops=set(), assign_ops=set()):
         '''
         You must implement yourself and figure out what to store.
         '''
@@ -32,14 +32,12 @@ FloatType = uCType("float",
 #one character
 CharType = uCType("char",
                 unary_ops   = {"&"},
-                binary_ops  = {"+"},
                 rel_ops     = {"==", "!=", "<", ">", "<=", ">="},
-                assign_ops  = {"=", "+=", "-=", "*=", "/=", "%="}
+                assign_ops  = {"="}
             )
 
 StringType = uCType("string",
                 unary_ops   = {"&"},
-                binary_ops  = {"+"},
                 rel_ops     = {"==", "!=", "<", ">", "<=", ">="},
                 assign_ops  = {"="}
             )
@@ -56,6 +54,13 @@ ArrayType = uCType("float_array",
                 rel_ops     = {"==", "!="}
             )
 
+BoolType = uCType("bool",
+                unary_ops={"!"},
+                binary_ops={"||", "&&"},
+                rel_ops={"==", "!="},
+                assign_ops={"="}
+)
+
 ConstantType = uCType(a)(
     if a == 'char':
         return CharType
@@ -67,7 +72,7 @@ ConstantType = uCType(a)(
 
 VoidType = uCType("void")
 
-BoolType = uCType("bool")
+
 
 
 
