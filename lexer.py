@@ -76,7 +76,7 @@ class UCLexer():
         'ID',
 
         # constants
-        'FLOAT_CONST', 'INT_CONST', 'STRING',
+        'FLOAT_CONST', 'INT_CONST', 'CHAR_CONST','STRING',
 
 
         # operations
@@ -256,6 +256,11 @@ class UCLexer():
       r'[0-9][0-9]*'
       t.type = self.keyword_map.get(t.value, "INT_CONST")
       return t
+    
+    def t_CHAR_CONST(self, t):
+      r'\'.{1}\''
+      t.type = self.get(t.value, "CHAR_CONST")
+      return t
 
     def t_MOD(self,t):
       r'\%'
@@ -271,14 +276,14 @@ class UCLexer():
       t.type = self.keyword_map.get(t.value, "ID")
       return t
 
+    def t_string(self,t):
+      r'\"[^"]*\"'
+      t.type = self.keyword_map.get(t.value, "STRING")
+      return t
+
     def t_multilinecomment(self, t):
       r'/\*(.|\n)*?\*/'
       t.lexer.lineno += t.value.count('\n')
-
-    def t_string(self,t):
-      r'\".*?\"'
-      t.type = self.keyword_map.get(t.value, "STRING")
-      return t
 
     def t_error(self, t):
       msg = "Illegal character %s" % repr(t.value[0])
