@@ -64,8 +64,8 @@ class Interpreter(object):
         _aux = source.split('_')
         if _aux[0] not in {'fptosi', 'sitofp', 'label', 'jump', 'cbranch',
                            'define', 'call'}:
-            print(_aux[0])
-            print(_aux[1])
+            #print(_aux[0])
+            #print(_aux[1])
             _opcode = _aux[0] + '_' + _aux[1]
             for i, _val in enumerate(_aux[2:]):
                 if _val.isdigit():

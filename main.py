@@ -10,10 +10,11 @@
 
 import sys
 from contextlib import contextmanager
-from parser import UCParser
-from uc_sema import Visitor
+
 from uc_code import GenerateCode
 from uc_interpreter import Interpreter
+from parser import UCParser
+from uc_sema import *
 
 """
 One of the most important (and difficult) parts of writing a compiler
@@ -122,18 +123,18 @@ class Compiler:
         """
         self.parser = UCParser()
         self.ast = self.parser.parse(self.code, '', debug)
+        '''
+        if susy:
+            self.ast.show(showcoord=True)
+        elif ast_file is not None:
+            self.ast.show(buf=ast_file, showcoord=True)
+        '''
         
-    def _sema(self, susy, debug):
-        """ Decorate AST with semantic actions. If ast_file != None,
-            or running at susy machine,
-            prints out the abstract syntax tree. """
-        self.sema = Visitor(debug)
-        print('antes de chamar AST')
-        self.sema.visit(self.ast)
-        print('depois de chamar AST')
+    def _semantic(self, susy, debug):
+            self.semantic = Visitor(debug)
+            self.semantic.visit(self.ast)
 
     def _gencode(self, susy, ir_file):
-        """ Generate uCIR Code for the decorated AST. """
         self.gen = GenerateCode()
         self.gen.visit(self.ast)
         self.gencode = self.gen.text + self.gen.code
@@ -142,12 +143,12 @@ class Compiler:
             for _code in self.gencode:
                 _str += f"{_code}\n"
             ir_file.write(_str)
-            
+
     def _do_compile(self, susy, ast_file, ir_file, debug):
         """ Compiles the code to the given file object. """
         try:
             self._parse(susy, ast_file, debug)
-            self._sema(susy, debug)
+            self._semantic(susy, debug)
             self._gencode(susy, ir_file)
         except AssertionError as e:
             error(None, e)
@@ -169,14 +170,14 @@ def run_compiler():
     """ Runs the command-line compiler. """
 
     if len(sys.argv) < 2:
-        print("Usage: ./uc <source-file> [-at-susy] [-no-ast] [-no-ir] [-no-run] [-debug]")
+        print("Usage: ./uc.py <source-file> [-at-susy] [-no-ast] [-debug]")
         sys.exit(1)
 
     emit_ast = True
     emit_ir = True
-    run_ir = True
     susy = False
     debug = False
+    run_ir = True
 
     params = sys.argv[1:]
     files = sys.argv[1:]
@@ -187,10 +188,10 @@ def run_compiler():
                 emit_ast = False
             elif param == '-no-ir':
                 emit_ir = False
-            elif param == '-at-susy':
-                susy = True
             elif param == '-no-run':
                 run_ir = False
+            elif param == '-at-susy':
+                susy = True
             elif param == '-debug':
                 debug = True
             else:
@@ -205,7 +206,6 @@ def run_compiler():
             source_filename = file + '.uc'
 
         open_files = []
-
         ast_file = None
         if emit_ast and not susy:
             ast_filename = source_filename[:-3] + '.ast'
@@ -232,6 +232,6 @@ def run_compiler():
 
     sys.exit(retval)
 
-    
+
 if __name__ == '__main__':
     run_compiler()

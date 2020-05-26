@@ -1,7 +1,6 @@
 import ply.lex as lex
 
-
-class UCLexer():
+class UCLexer:
     """ A lexer for the uC language. After building it, set the
         input text with input(), and call token() to get new
         tokens.
@@ -54,240 +53,107 @@ class UCLexer():
     def _make_tok_location(self, token):
         return (token.lineno, self.find_tok_column(token))
 
-    # Test function get
-    def get__item(self):
-      return self
+    keywords = ('ASSERT', 'BREAK', 'PRINT', 'READ', 'FOR', 'RETURN', 'WHILE', 'IF', 'ELSE',
+                'VOID', 'INT', 'FLOAT', 'CHAR')
 
-    # Reserved keywords
-    keywords = (
-        'ASSERT', 'BREAK', 'CHAR', 'ELSE', 'FLOAT', 'FOR', 'IF',
-        'INT', 'PRINT', 'READ', 'RETURN', 'VOID', 'WHILE',
-    )
+    tokens = (
+        # identifiers
+        'ID', 
+        
+        # constant
+        'INT_CONST', 'FLOAT_CONST', 'CHAR_CONST', 'STRING','ASSIGN_TIMES', 'PLUSPLUS', 'MINUSMINUS',
+        'ASSIGN_DIVIDE', 'ASSIGN_MOD', 'ASSIGN_PLUS', 'ASSIGN_MINUS', 
+        'DIFF', 'AND', 'OR', 'ADDRESS', 'NOT', 'EQUALS',
+        'LT', 'HT', 'LE', 'HE', 'EQ',
+
+        # operations
+        'PLUS', 'MINUS', 'TIMES', 'DIVIDE','MOD',
+
+        #braces
+        'LPAREN', 'RPAREN','LBRACE', 'RBRACE', 'LBRACKET', 'RBRACKET', 
+
+        #punctuation
+        'COMMA', 'SEMI',     
+      ) + keywords
 
     keyword_map = {}
     for keyword in keywords:
         keyword_map[keyword.lower()] = keyword
 
-    #
-    # All the tokens recognized by the lexer
-    #
-    tokens = keywords + (
-        # Identifiers
-        'ID',
-
-        # constants
-        'FLOAT_CONST', 'INT_CONST', 'CHAR_CONST','STRING',
-
-
-        # operations
-        'PLUS', 'PLUSPLUS', 'MINUS', 'MINUSMINUS', 'TIMES', 'DIVIDE', 'ADDRESS', 'OR', 'AND', 'NOT', 'DIFF', 
-        'EQUALS', 'LT', 'LE', 'HT', 'HE', 'EQ', 'ASSIGN_TIMES', 'ASSIGN_DIVIDE', 'ASSIGN_MOD', 'ASSIGN_PLUS', 'ASSIGN_MINUS',  'MOD', 
-
-        # braces
-        'LPAREN', 'RPAREN', 'LBRACKET', 'RBRACKET', 'LBRACE', 'RBRACE', 
-
-        # punctuation
-        'SEMI', 'COMMA',
-    )
-
-
-    # Rules
-    t_ignore = ' \t'
-
-    def t_ASSIGN_PLUS(self, t):
-      r'\+='
-      t.type = self.keyword_map.get(t.value, "ASSIGN_PLUS")
-      return t
-
-    def t_PLUSPLUS(self, t):
-      r'\+\+'
-      t.type = self.keyword_map.get(t.value, "PLUSPLUS")
-      return t
-
-    def t_PLUS(self, t):
-      r'\+'
-      t.type = self.keyword_map.get(t.value, "PLUS")
-      return t
-
-    def t_ASSIGN_MINUS(self, t):
-      r'\-\='
-      t.type = self.keyword_map.get(t.value, "ASSIGN_MINUS")
-      return t
-
-    def t_MINUSMINUS(self,t):
-      r'\-\-'
-      t.type = self.keyword_map.get(t.value,"MINUSMINUS")
-      return t
-
-    def t_MINUS(self, t):
-      r'\-'
-      t.type = self.keyword_map.get(t.value, "MINUS")
-      return t
-
-    def t_ASSIGN_TIMES(self, t):
-      r'\*\='
-      t.type = self.keyword_map.get(t.value,"ASSIGN_TIMES")
-      return t
-
-    def t_TIMES(self, t):
-      r'\*'
-      t.type = self.keyword_map.get(t.value, "TIMES")
-      return t
-    
-    def t_comment(self,t):
-      r'\/\/.*'
-
-    def t_ASSIGN_DIVIDE(self, t):
-      r'\/\='
-      t.type = self.keyword_map.get(t.value, "ASSIGN_DIVIDE")
-      return t
-
-    def t_DIVIDE(self,t):
-      r'\/'
-      t.type = self.keyword_map.get(t.value, "DIVIDE")
-      return t
-
-    def t_SEMI(self, t):
-      r'\;'
-      t.type = self.keyword_map.get(t.value, "SEMI")
-      return t
-
-    def t_COMMA(self,t):
-      r'\,'
-      t.type = self.keyword_map.get(t.value, "COMMA")
-      return t
-
-    def t_ADDRESS(self,t):
-      r'\&'
-      t.type = self.keyword_map.get(t.value, "ADDRESS")
-      return t
-
-    def t_OR(self, t):
-      r'\|\|'
-      t.type = self.keyword_map.get(t.value,"OR")
-      return t
-
-    def t_AND(self, t):
-      r'\&\&'
-      t.type = self.keyword_map.get(t.value,"AND")
-      return t
-
-    def t_DIFF(self,t):
-      r'\!\='
-      t.type = self.keyword_map.get(t.value, "DIFF")
-      return t
-
-    def t_NOT(self, t):
-      r'\!'
-      t.type = self.keyword_map.get(t.value,"NOT")
-      return t
-
-    def t_EQUALS(self, t):
-      r'\=\='
-      t.type = self.keyword_map.get(t.value, "EQUALS")
-      return t
-
-    def t_LE(self, t):
-      r'\<\='
-      t.type = self.keyword_map.get(t.value, "LT")
-      return t
-
-    def t_LT(self, t):
-      r'\<'
-      t.type = self.keyword_map.get(t.value, "LE")
-      return t
-
-    def t_HE(self, t):
-      r'\>\='
-      t.type = self.keyword_map.get(t.value, "HT")
-      return t
-
-    def t_HT(self, t):
-      r'\>'
-      t.type = self.keyword_map.get(t.value, "HE")
-      return t
-
-    def t_EQ(self, t):
-      r'\='
-      t.type = self.keyword_map.get(t.value, "EQ")
-      return t
-
-    def t_ASSIGN_MOD(self, t):
-      r'\%\='
-      t.type = self.keyword_map.get(t.value, "ASSIGN_MOD")
-      return t
-
-    def t_LPAREN(self, t):
-      r'\('
-      t.type = self.keyword_map.get(t.value, "LPAREN")
-      return t
-
-    def t_RPAREN(self, t):
-      r'\)'
-      t.type = self.keyword_map.get(t.value, "RPAREN")
-      return t
-
-    def t_LBRACKET(self, t):
-      r'\['
-      t.type = self.keyword_map.get(t.value, "LBRACKET")
-      return t
-
-    def t_RBRACKET(self, t):
-      r'\]'
-      t.type = self.keyword_map.get(t.value, "RBRACKET")
-      return t
-
-    def t_LBRACE(self, t):
-      r'\{'
-      t.type = self.keyword_map.get(t.value, "LBRACE")
-      return t
-
-    def t_RBRACE(self, t):
-      r'\}'
-      t.type = self.keyword_map.get(t.value, "RBRACE")
-      return t
-
-    def t_FLOAT_CONST(self, t):
-      r'[0-9]\.[0-9]*'
-      t.type = self.keyword_map.get(t.value, "FLOAT_CONST")
-      return t
-
-    def t_INT_CONST(self, t):
-      r'[0-9][0-9]*'
-      t.type = self.keyword_map.get(t.value, "INT_CONST")
-      return t
-    
-    def t_CHAR_CONST(self, t):
-      r'\'.{1}\''
-      t.type = self.get(t.value, "CHAR_CONST")
-      return t
-
-    def t_MOD(self,t):
-      r'\%'
-      t.type = self.keyword_map.get(t.value, "MOD")
-      return t
-
-    def t_NEWLINE(self, t):
-      r'\n+'
-      t.lexer.lineno += t.value.count("\n")
+    # Regular expression rules for simple tokens
+    t_PLUS = r'\+'
+    t_MINUS = r'-'
+    t_TIMES = r'\*'
+    t_DIVIDE = r'/'
+    t_MOD = r'%'
+    t_PLUSPLUS = r'\+\+'
+    t_MINUSMINUS = r'--'
+    t_ASSIGN_PLUS = r'\+='
+    t_ASSIGN_MINUS = r'-='
+    t_ASSIGN_TIMES = r'\*='
+    t_ASSIGN_DIVIDE = r'\/='
+    t_ASSIGN_MOD = r'%='
+    t_EQUALS = r'='
+    t_AND = r'\&\&'
+    t_OR = r'\|\|'
+    t_ADDRESS = r'\&'
+    t_NOT = r'!'
+    t_LPAREN = r'\('
+    t_RPAREN = r'\)'
+    t_LBRACKET = r'\['
+    t_RBRACKET = r'\]'
+    t_LBRACE = r'{'
+    t_RBRACE = r'}'
+    t_COMMA = r','
+    t_SEMI = r';'
+    t_LT = r'<'
+    t_HT = r'>'
+    t_LE = r'<='
+    t_HE = r'>='
+    t_EQ = r'=='
+    t_DIFF = r'!='
 
     def t_ID(self, t):
-      r'[a-zA-Z_][0-9a-zA-Z_]*'
-      t.type = self.keyword_map.get(t.value, "ID")
-      return t
+        r'[a-zA-Z_][a-zA-Z0-9_]*'
+        t.type = self.keyword_map.get(t.value, "ID")
+        return t
 
-    def t_string(self,t):
-      r'\"[^"]*\"'
-      t.type = self.keyword_map.get(t.value, "STRING")
-      return t
+    def t_FLOAT_CONST(self, t):
+        r'\d*\.\d*'
+        t.type = self.keyword_map.get(t.value, "FLOAT_CONST")
+        return t
 
-    def t_multilinecomment(self, t):
-      r'/\*(.|\n)*?\*/'
-      t.lexer.lineno += t.value.count('\n')
+    def t_INT_CONST(self, t):
+        r'[0-9]+'
+        t.type = self.keyword_map.get(t.value, "INT_CONST")
+        return t
 
+    def t_CHAR_CONST(self, t):
+        r'\'.{1}\''
+        t.type = self.keyword_map.get(t.value, "CHAR_CONST")
+        return t
+
+    def t_STRING(self, t):
+        r'\"[^"]*\"'
+        t.type = self.keyword_map.get(t.value, "STRING")
+        return t
+
+    # Define a rule so we can track line numbers
+    def t_newline(self, t):
+        r'\n+'
+        t.lexer.lineno += len(t.value)
+
+    def t_comment(self, t):
+        r'(\/\*(.|\n)*?\*\/)|(\/\/.*)'
+        pass
+
+    # # A string containing ignored characters (spaces and tabs)
+    t_ignore = ' \t'
+
+    # Error handling rule
     def t_error(self, t):
-      msg = "Illegal character %s" % repr(t.value[0])
-      self._error(msg, t)
+        print("Illegal character '%s'" % t.value[0])
+        t.lexer.skip(1)
 
 '''
     def scan(self, data):
@@ -297,16 +163,10 @@ class UCLexer():
             if not tok:
                 break
             print(tok) # Test print 
-
-
 if __name__ == '__main__':
     import sys
-
-
     def print_error(msg, x, y):
         print("Lexical error: %s at %d:%d" % (msg, x, y))
-
-
     m = UCLexer(print_error)
     m.build()  # Build the lexer
     m.scan(open(sys.argv[1]).read())  # print tokens
